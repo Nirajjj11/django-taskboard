@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
 def main(request):
-    
-    return render(request, 'main.html')
+    data = {
+        'title': "HomePage",
+        'bdata': "Hello niraj",
+    }
+    return render(request, 'index.html', data)
