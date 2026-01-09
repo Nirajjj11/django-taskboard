@@ -1,0 +1,76 @@
+{% extends "index.html" %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Enter New Task</h2>
+
+    <!-- Bootstrap Alert (Hidden by default) -->
+    <div id="alertBox" class="alert alert-success d-none" role="alert"></div>
+
+    <input type="text" class="form-control my-2" id="titleEl" placeholder="Task title">
+    <textarea class="form-control my-2" id="descEl" placeholder="Task description"></textarea>
+
+    <input type="hidden" id="csrfToken" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <p>Auto save in: <span id="counter">2</span> sec</p>
+</div>
+
+<script>
+    const titleEl = document.getElementById("titleEl");
+    const descEl = document.getElementById("descEl");
+    const counterEl = document.getElementById("counter");
+    const alertBox = document.getElementById("alertBox");
+    const csrf = document.getElementById("csrfToken").value;
+
+    let countdown;
+    let timer;
+
+    function startTimer() {
+        clearTimeout(timer);
+        clearInterval(countdown);
+
+        let timeLeft = 2;
+        counterEl.innerText = timeLeft;
+
+        countdown = setInterval(() => {
+            timeLeft--;
+            counterEl.innerText = timeLeft;
+            if (timeLeft <= 0) clearInterval(countdown);
+        }, 1000);
+
+        timer = setTimeout(saveTask, 2000);
+    }
+
+    titleEl.addEventListener("input", startTimer);
+    descEl.addEventListener("input", startTimer);
+
+    async function saveTask() {
+        const formData = new FormData();
+        formData.append("title", titleEl.value);
+        formData.append("description", descEl.value);
+
+        try {
+            const res = await fetch("/task/add-task/", {
+                method: "POST",
+                body: formData,
+                headers: { "X-CSRFToken": csrf }
+            });
+
+            const data = await res.json();
+
+            if (data.status === "saved") {
+                alertBox.classList.remove("d-none");  // show alert
+                alertBox.innerText = `Task Saved to Database! (ID: ${data.id})`;
+
+                setTimeout(() => {
+                    window.location.href = "/task/";  // redirect after alert
+                }, 1500);
+            }
+        } catch (err) {
+            alertBox.classList.remove("d-none");
+            alertBox.classList.replace("alert-success", "alert-danger");
+            alertBox.innerText = "Error saving task!";
+        }
+    }
+</script>
+
+{% endblock %}
