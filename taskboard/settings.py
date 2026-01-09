@@ -58,7 +58,7 @@ ROOT_URLCONF = 'taskboard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],   # ✔ FIXED
+        'DIRS': [BASE_DIR , "templates"],   # ✔ FIXED
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
