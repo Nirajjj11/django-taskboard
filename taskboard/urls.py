@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/task', include('tasks.urls')),
+    path('task/', include('tasks.urls')),
     path("", views.main , name="index")
 ]

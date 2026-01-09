@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1>Task List</h1>
+<ul>
+  {% for t in all_tasks %}
+    <li>{{ t.title }} - {{ t.is_completed }}</li>
+  {% empty %}
+    <li>No tasks found</li>
+  {% endfor %}
+</ul>
+{% endblock %}

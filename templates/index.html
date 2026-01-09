@@ -9,9 +9,16 @@
     
 </head>
 <body>
-    {% include 'header.html' %}
-    <h1>This is the main page</h1>
-    <h2>{{ bdata }}</h2>
+    <div class="container">
+        {% include 'header.html' %}
+
+            {% block content %}
+
+            {% endblock %}
+
+        <h2>{{ bdata }}</h2>
+    </div>
+    
     
 </body>
 </html>
